@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tweetContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="10dp">
 
     <ImageView
         android:id="@+id/ivProfileImage"
@@ -11,8 +13,7 @@
         android:layout_height="50dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars"
-        android:padding="3dp"/>
+        tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
         android:id="@+id/tvScreenName"
@@ -21,10 +22,7 @@
         android:text="TextView"
         app:layout_constraintLeft_toRightOf="@id/ivProfileImage"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Adam Crater"
-        android:paddingLeft="3dp"
-        android:paddingTop="1dp"
-        android:paddingBottom="1dp"/>
+        tools:text="Adam Crater"/>
 
     <TextView
         android:id="@+id/tvBody"
@@ -32,9 +30,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/tvScreenName"
         app:layout_constraintLeft_toRightOf="@id/ivProfileImage"
-        android:text="TextView"
-        tools:layout_editor_absoluteX="34dp"
-        tools:layout_editor_absoluteY="16dp"
+        android:text="body"
         android:padding="3dp"/>
 
 </android.support.constraint.ConstraintLayout>

@@ -20,8 +20,8 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 		protected Void doInBackground(SampleModel... sampleModels) {
 			sampleModelDao.insertModel(sampleModels);
 			return null;
-		};
-	};
+		}
+    };
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

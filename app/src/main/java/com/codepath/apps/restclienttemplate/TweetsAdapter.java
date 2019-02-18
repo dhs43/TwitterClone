@@ -3,13 +3,14 @@ package com.codepath.apps.restclienttemplate;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
+import com.codepath.apps.restclienttemplate.models.GlideApp;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 
 import java.util.List;
@@ -36,13 +37,16 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
     //bind values based on the position of the element
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Tweet tweet = tweets.get(position);
-        viewHolder.tvBody.setText(tweet.getBody());
-        viewHolder.tvScreenName.setText(tweet.user.getScreenName());
-        Glide.with(context)
-                .load(tweet.user.profileImageUrl)
-                .into(viewHolder.ivProfileImage);
+        holder.tvBody.setText(tweet.getBody());
+        holder.tvScreenName.setText(tweet.user.getScreenName());
+        String tempImg = tweet.user.profileImageUrl;
+        GlideApp.with(context)
+                .load(tempImg)
+                .error(R.drawable.error)
+                .into(holder.ivProfileImage);
+        Log.d("testing", tweet.user.profileImageUrl);
     }
 
     @Override
