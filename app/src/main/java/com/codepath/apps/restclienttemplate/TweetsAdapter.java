@@ -46,7 +46,6 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                 .load(tempImg)
                 .error(R.drawable.error)
                 .into(holder.ivProfileImage);
-        Log.d("testing", tweet.user.profileImageUrl);
     }
 
     @Override

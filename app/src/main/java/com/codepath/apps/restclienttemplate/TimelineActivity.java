@@ -28,6 +28,8 @@ public class TimelineActivity extends AppCompatActivity {
 
     private SwipeRefreshLayout swipeContainer;
 
+    private EndlessRecyclerViewScrollListener scrollListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,10 +56,20 @@ public class TimelineActivity extends AppCompatActivity {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Log.d("twitterclient","refreshingContent");
                 populateHomeTimeline();
             }
         });
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        rvTweets.setLayoutManager(linearLayoutManager);
+        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                //use max ID to get specific posts
+                //https://developer.twitter.com/en/docs/tweets/timelines/api-reference/get-statuses-home_timeline.html
+                populateOlderTweets();
+            }
+        };
+        rvTweets.addOnScrollListener(scrollListener);
     }
 
     private void populateHomeTimeline() {
@@ -94,5 +106,9 @@ public class TimelineActivity extends AppCompatActivity {
                 Log.e("TwitterClient", errorResponse.toString());
             }
         });
+    }
+
+    private void populateOlderTweets() {
+        Log.d("scroll", "activated");
     }
 }
