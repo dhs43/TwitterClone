@@ -16,21 +16,59 @@
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toRightOf="@id/ivProfileImage"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Adam Crater"
+        android:paddingLeft="4dp"/>
+
+    <TextView
         android:id="@+id/tvScreenName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
-        app:layout_constraintLeft_toRightOf="@id/ivProfileImage"
+        android:textStyle="italic"
+        app:layout_constraintLeft_toRightOf="@id/tvName"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Adam Crater"/>
+        tools:text="Adam Crater"
+        android:paddingLeft="4dp"/>
 
     <TextView
-        android:id="@+id/tvBody"
+        android:id="@+id/tvCreatedAt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Adam Crater"
+        android:paddingRight="4dp"/>
+
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/contentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/tvScreenName"
-        app:layout_constraintLeft_toRightOf="@id/ivProfileImage"
-        android:text="body"
-        android:padding="3dp"/>
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_marginLeft="50dp">
+
+        <TextView
+            android:id="@+id/tvBody"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:text="This here is body text and its aim is to add some information."
+            android:padding="4dp"/>
+
+        <ImageView
+            android:id="@+id/ivMedia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvBody"
+            tools:srcCompat="@drawable/error" />
+    </android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>

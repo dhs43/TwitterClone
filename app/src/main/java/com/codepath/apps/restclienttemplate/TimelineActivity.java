@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -25,10 +27,11 @@ public class TimelineActivity extends AppCompatActivity {
     RecyclerView rvTweets;
     private TweetsAdapter adapter;
     private List<Tweet> tweets;
+    public Long lastTweetId;
 
     private SwipeRefreshLayout swipeContainer;
-
     private EndlessRecyclerViewScrollListener scrollListener;
+    private ProgressBar pbLoading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +48,8 @@ public class TimelineActivity extends AppCompatActivity {
         //Recycler view setup: layout manager and adapter
         rvTweets.setLayoutManager(new LinearLayoutManager(this));
         rvTweets.setAdapter(adapter);
+        pbLoading = findViewById(R.id.pbLoading);
+        pbLoading.setVisibility(View.INVISIBLE);
         swipeContainer = findViewById(R.id.swipeContainer);
         swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_blue_bright,
@@ -64,9 +69,14 @@ public class TimelineActivity extends AppCompatActivity {
         scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                //use max ID to get specific posts
-                //https://developer.twitter.com/en/docs/tweets/timelines/api-reference/get-statuses-home_timeline.html
+                pbLoading.setVisibility(View.VISIBLE);
                 populateOlderTweets();
+                //hide loading element after 1 second
+                pbLoading.postDelayed(new Runnable() {
+                    public void run() {
+                        pbLoading.setVisibility(View.GONE);
+                    }
+                }, 1000);
             }
         };
         rvTweets.addOnScrollListener(scrollListener);
@@ -94,6 +104,7 @@ public class TimelineActivity extends AppCompatActivity {
                 //show new data received
                 adapter.addTweets(tweetsToAdd);
                 swipeContainer.setRefreshing(false);
+                lastTweetId = tweets.get(tweets.size()-1).getUid();
             }
 
             @Override
@@ -109,6 +120,37 @@ public class TimelineActivity extends AppCompatActivity {
     }
 
     private void populateOlderTweets() {
-        Log.d("scroll", "activated");
+        client.getOlderTweets(lastTweetId, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                List<Tweet> tweetsToAdd = new ArrayList<>();
+                for (int i = 0; i < response.length(); i++) {
+                    try {
+                        JSONObject jsonTweetObject = response.getJSONObject(i);
+                          Tweet tweet = Tweet.fromJson(jsonTweetObject);
+                        //add the tweet into our data source
+                        tweetsToAdd.add(tweet);
+                        //notify the adapter
+                        adapter.notifyItemInserted(tweets.size() - 1);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                //show new data received
+                adapter.addTweets(tweetsToAdd);
+                swipeContainer.setRefreshing(false);
+                lastTweetId = tweets.get(tweets.size() - 1).getUid();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Log.e("TwitterClient", responseString);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Log.e("TwitterClient", errorResponse.toString());
+            }
+        });
     }
 }
