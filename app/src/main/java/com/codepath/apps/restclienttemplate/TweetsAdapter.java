@@ -4,17 +4,14 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.codepath.apps.restclienttemplate.models.GlideApp;
-import com.codepath.apps.restclienttemplate.models.GlideAppModule;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 
 import java.text.ParseException;
@@ -69,6 +66,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
     //define the ViewHolder
     public class ViewHolder extends RecyclerView.ViewHolder {
 
+        public TextView tvRetweeted;
         public ImageView ivProfileImage;
         public TextView tvName;
         public TextView tvScreenName;
@@ -78,6 +76,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            tvRetweeted = itemView.findViewById(R.id.tvRetweeted);
             ivProfileImage = itemView.findViewById(R.id.ivProfileImage);
             tvName = itemView.findViewById(R.id.tvName);
             tvScreenName = itemView.findViewById(R.id.tvScreenName);
@@ -89,6 +88,12 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         }
 
         public void bind(final Tweet tweet){
+            if (tweet.isRetweet) {
+                tvRetweeted.setVisibility(View.VISIBLE);
+                tvRetweeted.setText("Retweeted");
+            }else{
+                tvRetweeted.setVisibility(View.GONE);
+            }
             tvBody.setText(tweet.getBody());
             tvName.setText(tweet.user.getName());
             tvScreenName.setText("@" + tweet.user.getScreenName());

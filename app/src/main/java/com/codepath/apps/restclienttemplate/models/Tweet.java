@@ -10,10 +10,20 @@ public class Tweet {
     public String createdAt;
     public User user;
     public String mediaLink;
+    public static Boolean isRetweet = false;
     //public String videoLink;
 
     public static Tweet fromJson(JSONObject jsonObject) throws JSONException {
+
         Tweet tweet = new Tweet();
+
+        if (jsonObject.has("retweeted_status")) {
+            jsonObject = jsonObject.getJSONObject("retweeted_status");
+            isRetweet = true;
+        }else{
+            isRetweet = false;
+        }
+
         tweet.body = jsonObject.getString("full_text");
         tweet.uid = jsonObject.getLong("id");
         tweet.createdAt = jsonObject.getString("created_at");
