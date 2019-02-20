@@ -120,7 +120,7 @@ public class TimelineActivity extends AppCompatActivity {
     }
 
     private void populateOlderTweets() {
-        client.getOlderTweets(lastTweetId, new JsonHttpResponseHandler() {
+        client.getOlderTweets(lastTweetId + 1, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 List<Tweet> tweetsToAdd = new ArrayList<>();

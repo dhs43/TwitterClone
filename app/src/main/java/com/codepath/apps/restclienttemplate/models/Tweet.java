@@ -27,7 +27,7 @@ public class Tweet {
             Log.d("rex", extended_entities.toString());
             JSONArray mediaArray = extended_entities.getJSONArray("media");
             JSONObject media = mediaArray.getJSONObject(0);
-            tweet.mediaLink = media.getString("media_url");
+            tweet.mediaLink = media.getString("media_url_https");
             /*
             if (media.has("video_info")) {
                 JSONObject video_info = media.getJSONObject("video_info");

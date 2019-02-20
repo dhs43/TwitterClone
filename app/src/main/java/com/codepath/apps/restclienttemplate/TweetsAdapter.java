@@ -11,7 +11,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.codepath.apps.restclienttemplate.models.GlideApp;
+import com.codepath.apps.restclienttemplate.models.GlideAppModule;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 
 import java.text.ParseException;
@@ -43,23 +46,8 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Tweet tweet = tweets.get(position);
-        holder.tvBody.setText(tweet.getBody());
-        holder.tvName.setText(tweet.user.getName());
-        holder.tvScreenName.setText("@" + tweet.user.getScreenName());
-        holder.tvCreatedAt.setText(getRelativeTimeAgo(tweet.createdAt));
-        GlideApp.with(context)
-                .load(tweet.user.profileImageUrl)
-                .error(R.drawable.error)
-                .into(holder.ivProfileImage);
-        if (tweet.getMediaLink() != null) {
-            Log.d("rex", "Loading " + tweet.getMediaLink());
-            GlideApp.with(context)
-                    .load(tweet.getMediaLink())
-                    .error(R.drawable.error)
-                    .into(holder.ivMedia);
-        }else{
-            holder.ivMedia.getLayoutParams().height = 0;
-        }
+
+        holder.bind(tweet);
     }
 
     @Override
@@ -96,6 +84,33 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvCreatedAt = itemView.findViewById(R.id.tvCreatedAt);
             tvBody = itemView.findViewById(R.id.tvBody);
             ivMedia = itemView.findViewById(R.id.ivMedia);
+
+            ivMedia.setVisibility(View.GONE);
+        }
+
+        public void bind(final Tweet tweet){
+            tvBody.setText(tweet.getBody());
+            tvName.setText(tweet.user.getName());
+            tvScreenName.setText("@" + tweet.user.getScreenName());
+            tvCreatedAt.setText(getRelativeTimeAgo(tweet.createdAt));
+            GlideApp.with(context)
+                    .load(tweet.user.profileImageUrl)
+                    .transform(new RoundedCorners(100))
+                    .error(R.drawable.error)
+                    .into(ivProfileImage);
+            if (tweet.getMediaLink() != null) {
+                GlideApp.with(context)
+                        .load(tweet.getMediaLink())
+                        .centerCrop()
+                        .fitCenter()
+                        .transform(new RoundedCorners(30))
+                        .error(R.drawable.error)
+                        .into(ivMedia);
+                ivMedia.setVisibility(View.VISIBLE);
+            }else{
+                GlideApp.with(context).clear(ivMedia);
+                ivMedia.setVisibility(View.GONE);
+            }
         }
     }
 
