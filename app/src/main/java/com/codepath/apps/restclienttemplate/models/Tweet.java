@@ -1,7 +1,5 @@
 package com.codepath.apps.restclienttemplate.models;
 
-import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,18 +14,18 @@ public class Tweet {
 
     public static Tweet fromJson(JSONObject jsonObject) throws JSONException {
         Tweet tweet = new Tweet();
-        tweet.body = jsonObject.getString("text");
+        tweet.body = jsonObject.getString("full_text");
         tweet.uid = jsonObject.getLong("id");
         tweet.createdAt = jsonObject.getString("created_at");
         tweet.user = User.fromJson(jsonObject.getJSONObject("user"));
 
         //get tweet media
-        if (jsonObject.has("extended_entities")) {
-            JSONObject extended_entities = jsonObject.getJSONObject("extended_entities");
-            Log.d("rex", extended_entities.toString());
-            JSONArray mediaArray = extended_entities.getJSONArray("media");
+        JSONObject entities = jsonObject.getJSONObject("entities");
+        if (entities.has("media")) {
+            JSONArray mediaArray = entities.getJSONArray("media");
             JSONObject media = mediaArray.getJSONObject(0);
             tweet.mediaLink = media.getString("media_url_https");
+        }
             /*
             if (media.has("video_info")) {
                 JSONObject video_info = media.getJSONObject("video_info");
@@ -35,7 +33,6 @@ public class Tweet {
                 tweet.videoLink = variants.getString("url");
             }
             */
-        }
 
         return tweet;
     }

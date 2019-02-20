@@ -140,6 +140,7 @@ public class TimelineActivity extends AppCompatActivity {
                 adapter.addTweets(tweetsToAdd);
                 swipeContainer.setRefreshing(false);
                 lastTweetId = tweets.get(tweets.size() - 1).getUid();
+                Log.d("rex", response.toString());
             }
 
             @Override
