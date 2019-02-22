@@ -3,6 +3,7 @@ package com.codepath.apps.restclienttemplate;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -20,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
+
+import static android.support.v7.widget.DividerItemDecoration.VERTICAL;
 
 public class TimelineActivity extends AppCompatActivity {
 
@@ -42,6 +45,8 @@ public class TimelineActivity extends AppCompatActivity {
 
         //find the recycler view
         rvTweets = findViewById(R.id.rvTweets);
+        //add divider between RcyclerViews
+        rvTweets.addItemDecoration(new DividerItemDecoration(rvTweets.getContext(), VERTICAL));
         //initialize the list of tweets and adapter from the data source
         tweets = new ArrayList<>();
         adapter = new TweetsAdapter(this, tweets);

@@ -73,10 +73,12 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         public TextView tvCreatedAt;
         public TextView tvBody;
         public ImageView ivMedia;
+        public ImageView ivRetweeted;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvRetweeted = itemView.findViewById(R.id.tvRetweeted);
+            ivRetweeted = itemView.findViewById(R.id.ivMedia);
             ivProfileImage = itemView.findViewById(R.id.ivProfileImage);
             tvName = itemView.findViewById(R.id.tvName);
             tvScreenName = itemView.findViewById(R.id.tvScreenName);
@@ -89,6 +91,9 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
         public void bind(final Tweet tweet){
             if (tweet.isRetweet) {
+                //not currently loading image
+                ivRetweeted.setVisibility(View.VISIBLE);
+                ivRetweeted.setImageResource(R.drawable.retweet_icon);
                 tvRetweeted.setVisibility(View.VISIBLE);
                 tvRetweeted.setText("Retweeted");
             }else{
