@@ -33,8 +33,8 @@ public class TimelineActivity extends AppCompatActivity {
 
     private final int REQUEST_CODE = 20;
 
-    private TwitterClient client;
     RecyclerView rvTweets;
+    private TwitterClient client;
     private TweetsAdapter adapter;
     private List<Tweet> tweets;
     public Long lastTweetId;

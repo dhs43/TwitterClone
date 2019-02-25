@@ -2,10 +2,12 @@ package com.codepath.apps.restclienttemplate;
 
 import android.content.Context;
 
+import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.oauth.OAuthBaseClient;
 import com.github.scribejava.apis.TwitterApi;
 import com.github.scribejava.core.builder.api.BaseApi;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 /*
@@ -69,6 +71,20 @@ public class TwitterClient extends OAuthBaseClient {
         params.put("tweet_mode", "extended");
 		client.post(apiUrl, params, handler);
 	}
+
+    public void retweetTweet(Tweet tweet, JsonHttpResponseHandler handler) {
+	    if(tweet.retweetedByMe) {
+            String initialUrl = "statuses/unretweet/%s.json";
+            String apiUrl = getApiUrl(String.format(initialUrl, tweet.getId()));
+            client.post(apiUrl, handler);
+            tweet.retweetedByMe = false;
+        }else{
+            String initialUrl = "statuses/retweet/%s.json";
+            String apiUrl = getApiUrl(String.format(initialUrl, tweet.getId()));
+            client.post(apiUrl, handler);
+            tweet.retweetedByMe = true;
+        }
+    }
 
 	/* 1. Define the endpoint URL with getApiUrl and pass a relative path to the endpoint
 	 * 	  i.e getApiUrl("statuses/home_timeline.json");

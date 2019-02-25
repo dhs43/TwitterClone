@@ -7,6 +7,7 @@ import org.parceler.Parcel;
 
 @Parcel
 public class Tweet {
+    public String id;
     public String body;
     public long uid;
     public String createdAt;
@@ -14,6 +15,7 @@ public class Tweet {
     public String mediaLink;
     public boolean isRetweet;
     public User original_poster = null;
+    public Boolean retweetedByMe = false;
     //public String videoLink;
 
     public Tweet() {//empty constructor for Parceler
@@ -29,11 +31,12 @@ public class Tweet {
         }else{
             tweet.isRetweet = false;
         }
-
+        tweet.id = jsonObject.getString("id");
         tweet.body = jsonObject.getString("full_text");
         tweet.uid = jsonObject.getLong("id");
         tweet.createdAt = jsonObject.getString("created_at");
         tweet.user = User.fromJson(jsonObject.getJSONObject("user"));
+        tweet.retweetedByMe = jsonObject.getBoolean("retweeted");
 
         //get tweet media if not retweet
         JSONObject entities = jsonObject.getJSONObject("entities");
@@ -68,6 +71,10 @@ public class Tweet {
             */
 
         return tweet;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getBody() {
