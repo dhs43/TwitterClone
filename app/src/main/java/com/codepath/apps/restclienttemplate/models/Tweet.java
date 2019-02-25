@@ -12,7 +12,8 @@ public class Tweet {
     public String createdAt;
     public User user;
     public String mediaLink;
-    public static Boolean isRetweet = false;
+    public boolean isRetweet;
+    public User original_poster = null;
     //public String videoLink;
 
     public Tweet() {//empty constructor for Parceler
@@ -22,11 +23,11 @@ public class Tweet {
 
         Tweet tweet = new Tweet();
 
+
         if (jsonObject.has("retweeted_status")) {
-            jsonObject = jsonObject.getJSONObject("retweeted_status");
-            isRetweet = true;
+            tweet.isRetweet = true;
         }else{
-            isRetweet = false;
+            tweet.isRetweet = false;
         }
 
         tweet.body = jsonObject.getString("full_text");
@@ -34,12 +35,29 @@ public class Tweet {
         tweet.createdAt = jsonObject.getString("created_at");
         tweet.user = User.fromJson(jsonObject.getJSONObject("user"));
 
-        //get tweet media
+        //get tweet media if not retweet
         JSONObject entities = jsonObject.getJSONObject("entities");
         if (entities.has("media")) {
             JSONArray mediaArray = entities.getJSONArray("media");
             JSONObject media = mediaArray.getJSONObject(0);
             tweet.mediaLink = media.getString("media_url_https");
+        }
+
+        //get tweet media if retweet
+        JSONObject retweeted = null;
+        if (jsonObject.has("retweeted_status")) {
+            retweeted = jsonObject.getJSONObject("retweeted_status");
+        }
+        if (tweet.isRetweet){
+            JSONObject retweet_entities = retweeted.getJSONObject("entities");
+            if (retweet_entities.has("media")) {
+                JSONArray mediaArray = retweet_entities.getJSONArray("media");
+                JSONObject media = mediaArray.getJSONObject(0);
+                tweet.mediaLink = media.getString("media_url_https");
+            }
+
+            //get info of original poster
+            tweet.original_poster = User.fromJson(retweeted.getJSONObject("user"));
         }
             /*
             if (media.has("video_info")) {
@@ -70,5 +88,9 @@ public class Tweet {
 
     public String getMediaLink() {
         return mediaLink;
+    }
+
+    public boolean isRetweet() {
+        return isRetweet;
     }
 }

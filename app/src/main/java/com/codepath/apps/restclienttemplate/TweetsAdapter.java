@@ -2,8 +2,10 @@ package com.codepath.apps.restclienttemplate;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,6 +76,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         public TextView tvBody;
         public ImageView ivMedia;
         public ImageView ivRetweeted;
+        public ConstraintLayout retweetContainer;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -85,23 +88,33 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvCreatedAt = itemView.findViewById(R.id.tvCreatedAt);
             tvBody = itemView.findViewById(R.id.tvBody);
             ivMedia = itemView.findViewById(R.id.ivMedia);
-
-            ivMedia.setVisibility(View.GONE);
+            retweetContainer = itemView.findViewById(R.id.retweetContainer);
+            retweetContainer.setVisibility(View.GONE);
         }
 
         public void bind(final Tweet tweet){
             if (tweet.isRetweet) {
-                //not currently loading image
-                ivRetweeted.setVisibility(View.VISIBLE);
-                ivRetweeted.setImageResource(R.drawable.retweet_icon);
-                tvRetweeted.setVisibility(View.VISIBLE);
-                tvRetweeted.setText("Retweeted");
+                tvRetweeted.setText(tweet.getUser().getScreenName() + " Retweeted");
+                retweetContainer.setVisibility(View.VISIBLE);
+
+                //show original poster info
+                tvName.setText(tweet.original_poster.getName());
+                tvScreenName.setText("@" + tweet.original_poster.getScreenName());
+                Log.d("screnName ", tweet.original_poster.getScreenName());
+                GlideApp.with(context)
+                        .load(tweet.original_poster.profileImageUrl)
+                        .transform(new RoundedCorners(100))
+                        .error(R.drawable.error)
+                        .into(ivProfileImage);
             }else{
-                tvRetweeted.setVisibility(View.GONE);
+                retweetContainer.setVisibility(View.GONE);
             }
+
             tvBody.setText(tweet.getBody());
-            tvName.setText(tweet.user.getName());
-            tvScreenName.setText("@" + tweet.user.getScreenName());
+            if (tweet.isRetweet == false) {
+                tvName.setText(tweet.user.getName());
+                tvScreenName.setText("@" + tweet.user.getScreenName());
+            }
             tvCreatedAt.setText(getRelativeTimeAgo(tweet.createdAt));
             GlideApp.with(context)
                     .load(tweet.user.profileImageUrl)

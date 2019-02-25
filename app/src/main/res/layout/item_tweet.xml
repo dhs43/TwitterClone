@@ -7,29 +7,41 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="10dp">
 
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/retweetContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tvScreenName"
+        app:layout_constraintTop_toTopOf="parent"
+        android:paddingLeft="25dp">
+
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/ivRetweeted"
-        android:layout_width="10dp"
-        android:layout_height="10dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        app:layout_constraintRight_toLeftOf="@id/tvRetweeted"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/tvRetweeted"/>
+        app:srcCompat="@drawable/ic_retweet"/>
 
     <TextView
         android:id="@+id/tvRetweeted"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingStart="4dp"
         android:text="Retweeted"
-        app:layout_constraintLeft_toRightOf="@id/ivProfileImage"
-        app:layout_constraintTop_toTopOf="parent"
         android:textSize="16sp"
-        android:paddingStart="4dp"/>
+        app:layout_constraintLeft_toRightOf="@id/ivRetweeted"
+        app:layout_constraintTop_toTopOf="parent" />
+</android.support.constraint.ConstraintLayout>
 
     <ImageView
         android:id="@+id/ivProfileImage"
         android:layout_width="50dp"
         android:layout_height="50dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvRetweeted"
+        app:layout_constraintTop_toBottomOf="@id/retweetContainer"
         tools:srcCompat="@tools:sample/avatars"
         android:paddingTop="4dp"/>
 
@@ -39,9 +51,10 @@
         android:layout_height="wrap_content"
         android:textStyle="bold"
         app:layout_constraintLeft_toRightOf="@id/ivProfileImage"
-        app:layout_constraintTop_toBottomOf="@id/tvRetweeted"
+        app:layout_constraintTop_toBottomOf="@id/retweetContainer"
         tools:text="Adam Crater"
         android:textSize="16sp"
+        android:textColor="#000"
         android:paddingStart="4dp"/>
 
     <TextView
@@ -50,7 +63,7 @@
         android:layout_height="wrap_content"
         android:textStyle="italic"
         app:layout_constraintLeft_toRightOf="@id/tvName"
-        app:layout_constraintTop_toBottomOf="@id/tvRetweeted"
+        app:layout_constraintTop_toBottomOf="@id/retweetContainer"
         tools:text="Adam Crater"
         android:textSize="16sp"
         android:paddingStart="4dp"/>
@@ -85,6 +98,7 @@
             android:textColorLink="@color/colorPrimary"
             android:text="This here is body text and its aim is to add some information."
             android:textSize="16sp"
+            android:textColor="#000"
             android:padding="4dp"/>
 
         <ImageView
