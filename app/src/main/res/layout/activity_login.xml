@@ -11,13 +11,14 @@
     tools:context=".LoginActivity">
 
     <ImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/btnLogin"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:src="@drawable/twitter_bird"/>
+        android:src="@drawable/app_icon"
+        />
 
     <Button
         android:id="@+id/btnLogin"

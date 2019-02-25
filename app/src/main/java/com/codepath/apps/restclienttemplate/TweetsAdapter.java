@@ -114,13 +114,13 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             if (tweet.isRetweet == false) {
                 tvName.setText(tweet.user.getName());
                 tvScreenName.setText("@" + tweet.user.getScreenName());
+                GlideApp.with(context)
+                        .load(tweet.user.profileImageUrl)
+                        .transform(new RoundedCorners(100))
+                        .error(R.drawable.error)
+                        .into(ivProfileImage);
             }
             tvCreatedAt.setText(getRelativeTimeAgo(tweet.createdAt));
-            GlideApp.with(context)
-                    .load(tweet.user.profileImageUrl)
-                    .transform(new RoundedCorners(100))
-                    .error(R.drawable.error)
-                    .into(ivProfileImage);
             if (tweet.getMediaLink() != null) {
                 GlideApp.with(context)
                         .load(tweet.getMediaLink())

@@ -6,26 +6,39 @@
     android:layout_height="match_parent"
     tools:context=".ComposeActivity">
 
-    <EditText
-        android:id="@+id/etCompose"
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/composeTweetLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:ems="10"
-        android:hint="@string/compose_hint"
-        android:inputType="textMultiLine"
-        android:minLines="5"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="16dp"
-        android:layout_margin="8dp"/>
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        app:counterEnabled="true"
+        app:counterMaxLength="280">
+        <EditText
+            android:id="@+id/etCompose"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/compose_hint"
+            android:inputType="textMultiLine"
+            android:minLines="5"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:ems="10"
+            android:textColorHighlight="@color/colorPrimary"
+            android:backgroundTint="@color/colorPrimary"/>
+    </android.support.design.widget.TextInputLayout>
 
     <Button
         android:id="@+id/btnTweet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/etCompose"
+        app:layout_constraintTop_toBottomOf="@id/composeTweetLayout"
         app:layout_constraintRight_toRightOf="parent"
         android:text="@string/button_tweet"
-        android:layout_marginEnd="8dp"/>
+        android:layout_marginEnd="8dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:textColor="#FFF"/>
 </android.support.constraint.ConstraintLayout>

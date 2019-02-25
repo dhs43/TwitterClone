@@ -20,7 +20,7 @@ import cz.msebera.android.httpclient.Header;
 
 public class ComposeActivity extends AppCompatActivity {
 
-    public static final int CHARACTER_LIMIT = 140;
+    public static final int CHARACTER_LIMIT = 280;
 
     private EditText etCompose;
     private Button btnTweet;
