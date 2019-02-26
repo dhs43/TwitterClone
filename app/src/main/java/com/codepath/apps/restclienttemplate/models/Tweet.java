@@ -17,7 +17,7 @@ public class Tweet {
     public User original_poster = null;
     public Boolean retweetedByMe = false;
     public Boolean isFavorited = false;
-    //public String videoLink;
+    public String videoLink;
 
     public Tweet() {//empty constructor for Parceler
     }
@@ -46,32 +46,50 @@ public class Tweet {
             JSONArray mediaArray = entities.getJSONArray("media");
             JSONObject media = mediaArray.getJSONObject(0);
             tweet.mediaLink = media.getString("media_url_https");
+
+            if (jsonObject.has("extended_entities")) {
+                JSONObject extended_entities = jsonObject.getJSONObject("extended_entities");
+                JSONArray videoMediaArray = extended_entities.getJSONArray("media");
+                media = videoMediaArray.getJSONObject(0);
+                if (media.has("video_info")) {
+                    JSONObject video_info = media.getJSONObject("video_info");
+                    JSONArray variantsArray = video_info.getJSONArray("variants");
+                    JSONObject variants = variantsArray.getJSONObject(0);
+                    tweet.videoLink = variants.getString("url");
+                }
+            }
         }
 
-        //get tweet media if retweet
+
         JSONObject retweeted = null;
         if (jsonObject.has("retweeted_status")) {
             retweeted = jsonObject.getJSONObject("retweeted_status");
         }
+        //get tweet media if retweet
         if (tweet.isRetweet){
             JSONObject retweet_entities = retweeted.getJSONObject("entities");
             if (retweet_entities.has("media")) {
                 JSONArray mediaArray = retweet_entities.getJSONArray("media");
                 JSONObject media = mediaArray.getJSONObject(0);
                 tweet.mediaLink = media.getString("media_url_https");
+
+                JSONObject retweetedInfo = jsonObject.getJSONObject("retweeted_status");
+                if (retweetedInfo.has("extended_entities")) {
+                    JSONObject extended_entities = retweetedInfo.getJSONObject("extended_entities");
+                    JSONArray videoMediaArray = extended_entities.getJSONArray("media");
+                    media = videoMediaArray.getJSONObject(0);
+                    if (media.has("video_info")) {
+                        JSONObject video_info = media.getJSONObject("video_info");
+                        JSONArray variantsArray = video_info.getJSONArray("variants");
+                        JSONObject variants = variantsArray.getJSONObject(0);
+                        tweet.videoLink = variants.getString("url");
+                    }
+                }
             }
 
             //get info of original poster
             tweet.original_poster = User.fromJson(retweeted.getJSONObject("user"));
         }
-            /*
-            if (media.has("video_info")) {
-                JSONObject video_info = media.getJSONObject("video_info");
-                JSONObject variants = video_info.getJSONObject("variants");
-                tweet.videoLink = variants.getString("url");
-            }
-            */
-
         return tweet;
     }
 

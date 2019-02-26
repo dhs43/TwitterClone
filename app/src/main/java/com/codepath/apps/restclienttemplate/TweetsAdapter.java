@@ -2,6 +2,8 @@ package com.codepath.apps.restclienttemplate;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
@@ -12,7 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.codepath.apps.restclienttemplate.models.GlideApp;
@@ -88,6 +92,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         public ImageButton btnRetweet;
         public ImageButton btnHeart;
         public ImageButton btnShare;
+        public VideoView videoMedia;
 
         private TwitterClient client;
 
@@ -103,6 +108,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvCreatedAt = itemView.findViewById(R.id.tvCreatedAt);
             tvBody = itemView.findViewById(R.id.tvBody);
             ivMedia = itemView.findViewById(R.id.ivMedia);
+            videoMedia = itemView.findViewById(R.id.vvVideoMedia);
             retweetContainer = itemView.findViewById(R.id.retweetContainer);
             retweetContainer.setVisibility(View.GONE);
             btnComment = itemView.findViewById(R.id.btnComment);
@@ -112,6 +118,27 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         }
 
         public void bind(final Tweet tweet){
+            if (tweet.videoLink != null) {
+                Log.d("trying", "going?");
+                ivMedia.setVisibility(View.INVISIBLE);
+                Uri uri = Uri.parse(tweet.videoLink);
+
+                videoMedia.setMediaController(new MediaController(context));
+                videoMedia.setVideoURI(uri);
+                videoMedia.setMediaController(null);
+                videoMedia.requestFocus();
+                videoMedia.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                    @Override
+                    public void onPrepared(MediaPlayer mp) {
+                        mp.setLooping(true);
+                    }
+                });
+                videoMedia.start();
+            }else{
+                videoMedia.setVisibility(View.GONE);
+                ivMedia.setVisibility(View.VISIBLE);
+            }
+
             if (tweet.retweetedByMe) {
                 btnRetweet.setColorFilter(Color.rgb(0, 204, 0));
             }
@@ -131,7 +158,6 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                 GlideApp.with(context)
                         .load(tweet.original_poster.profileImageUrl)
                         .transform(new RoundedCorners(100))
-                        .error(R.drawable.error)
                         .into(ivProfileImage);
             }else{
                 retweetContainer.setVisibility(View.GONE);
@@ -144,7 +170,6 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                 GlideApp.with(context)
                         .load(tweet.user.profileImageUrl)
                         .transform(new RoundedCorners(100))
-                        .error(R.drawable.error)
                         .into(ivProfileImage);
             }
             tvCreatedAt.setText(getRelativeTimeAgo(tweet.createdAt));
@@ -154,9 +179,10 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                         .centerCrop()
                         .fitCenter()
                         .transform(new RoundedCorners(30))
-                        .error(R.drawable.error)
                         .into(ivMedia);
-                ivMedia.setVisibility(View.VISIBLE);
+                if (tweet.videoLink == null) {
+                    ivMedia.setVisibility(View.VISIBLE);
+                }
             }else{
                 GlideApp.with(context).clear(ivMedia);
                 ivMedia.setVisibility(View.GONE);
