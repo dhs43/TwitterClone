@@ -33,6 +33,7 @@ The following **bonus** features are implemented:
 
 The following **additional** features are implemented:
 
+- [x] The profile image, screename, and name of the original poster of a retweeted tweet is correctly displayed.
 - [x] Videos play, though caching is still an issue and after a while no more are loaded.
 
 ## Video Walkthrough
