@@ -116,6 +116,10 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                 btnRetweet.setColorFilter(Color.rgb(0, 204, 0));
             }
 
+            if (tweet.isFavorited) {
+                btnHeart.setImageResource(R.drawable.ic_heart_favorited);
+            }
+
             if (tweet.isRetweet) {
                 tvRetweeted.setText(tweet.getUser().getScreenName() + " Retweeted");
                 retweetContainer.setVisibility(View.VISIBLE);
@@ -171,7 +175,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                 @Override
                 public void onClick(View v)
                 {
-                    client.retweetTweet(tweet, new JsonHttpResponseHandler()  {
+                    client.retweetTweet(tweet, new JsonHttpResponseHandler() {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                             if (tweet.retweetedByMe) {
@@ -183,12 +187,34 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
                         @Override
                         public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                            Log.e("testing", "failure: " + errorResponse);
+                            Log.e("retweeted", "failure: " + errorResponse);
                         }
                     });
                 }
             });
 
+            btnHeart.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v)
+                {
+                    client.favoriteTweet(tweet, new JsonHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                            Log.d("favorited", "success");
+                            if (tweet.isFavorited) {
+                                btnHeart.setImageResource(R.drawable.ic_heart_favorited);
+                            }else{
+                                btnHeart.setImageResource(R.drawable.ic_heart);
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                            Log.e("favorited", "failure: " + errorResponse);
+                        }
+                    });
+                }
+            });
         }
     }
 

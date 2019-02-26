@@ -16,6 +16,7 @@ public class Tweet {
     public boolean isRetweet;
     public User original_poster = null;
     public Boolean retweetedByMe = false;
+    public Boolean isFavorited = false;
     //public String videoLink;
 
     public Tweet() {//empty constructor for Parceler
@@ -37,6 +38,7 @@ public class Tweet {
         tweet.createdAt = jsonObject.getString("created_at");
         tweet.user = User.fromJson(jsonObject.getJSONObject("user"));
         tweet.retweetedByMe = jsonObject.getBoolean("retweeted");
+        tweet.isFavorited = jsonObject.getBoolean("favorited");
 
         //get tweet media if not retweet
         JSONObject entities = jsonObject.getJSONObject("entities");
